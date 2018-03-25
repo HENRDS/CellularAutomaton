@@ -8,3 +8,4 @@ find_package(OpenCV REQUIRED)
 include_directories(${OPENCV_INCLUDE_DIRS})
 add_executable(Automata main.cc Lattice.hpp Cellular.hpp GasAutomaton.cc GasAutomaton.hpp)
 target_link_libraries(${CMAKE_PROJECT_NAME} ${OpenCV_LIBS})
+
