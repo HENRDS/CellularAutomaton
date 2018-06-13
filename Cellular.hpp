@@ -10,7 +10,7 @@
 
 namespace Automata {
   template<class T, ::std::size_t _size, bool auto_swap = false>
-  class CellularAutomata {
+  class CellularAutomaton {
   public:
       static constexpr std::size_t size = _size;
       void execute() {
@@ -55,7 +55,7 @@ namespace Automata {
       Lattice<T, _size> _currentLattice;
       Lattice<T, _size> _nextLattice;
       bool _hasErrorOcurred;
-      explicit CellularAutomata(std::size_t totalSteps)
+      explicit CellularAutomaton(std::size_t totalSteps)
           : _totalSteps(totalSteps), _currentStep(0), _hasErrorOcurred(false) {}
 
       virtual void applyRule() = 0;

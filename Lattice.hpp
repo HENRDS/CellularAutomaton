@@ -9,46 +9,32 @@
 #include <algorithm>
 
 namespace Automata {
-    template<class T, std::size_t _size, std::size_t _align = 0>
+    template<class T, std::size_t _width, std::size_t _height = _width, std::size_t _align = 0>
     struct Lattice {
     public:
-        using type = T;
-        static constexpr std::size_t size = _size;
+        using value_type = T;
+        static constexpr auto height = _height;
+        static constexpr auto width =  _width;
 
-        constexpr T& operator()(unsigned x, unsigned  y) {
-            auto index = (y * size) + x;
-            if (x >= size || y >= size)
-                index = 0;
+        value_type& operator()(std::size_t x, std::size_t  y) {
+            auto index = (y * width) + x;
+            if ((x >= width) || (y >= height))
+                throw std::out_of_range("out of range");
             return data[index];
         }
 
-        constexpr T operator()(unsigned x, unsigned  y) const {
-            auto index = (y * size) + x;
-            if (x >= size || y >= size)
-                index = 0;
+        value_type operator()(std::size_t x, std::size_t  y) const {
+            auto index = (y * width) + x;
+            if ((x >= width) || (y >= height))
+                throw std::out_of_range("out of range");
             return data[index];
         }
 
-        constexpr void swap(Lattice& other) {
+        void swap(Lattice& other) {
             std::swap(data, other.data);
         }
-//        template<class U>
-//        constexpr U& as(unsigned x, unsigned  y) {
-//            auto index = y * size + x;
-//            if (index >= length)
-//                index = 0;
-//            return reinterpret_cast<U*>(data+index);
-//        }
-//        template<class U>
-//        constexpr U as(unsigned x, unsigned  y) const {
-//            auto index = y * size + x;
-//            if (index >= length)
-//                index = 0;
-//            return *reinterpret_cast<U*>(data+index);
-//        }
     private:
-        static constexpr std::size_t length = _size * _size;
-        alignas(_align) T data[length];
+        alignas(_align) value_type data[height * width];
     };
 }
 

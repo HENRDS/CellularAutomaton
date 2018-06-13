@@ -10,15 +10,16 @@
 #include "Cellular.hpp"
 
 namespace Automata {
-  using ubyte = unsigned char;
-  class GasAutomaton : public CellularAutomata<ubyte, 400> {
+  using dataType = unsigned short;
+  class GasAutomaton : public CellularAutomaton<dataType, 400> {
   public:
+      static constexpr auto bitsInDataType = sizeof(dataType) << 3UL;
       GasAutomaton(size_t totalSteps, std::string outputPath);
       virtual ~GasAutomaton() noexcept;
 
   private:
       enum Direction : unsigned {
-          North = 0, South = 1, East = 2, West = 3, Solid = 4
+          Northwest  = 0, North, Northeast, East, Southeast, South, Southwest, West, Solid
       };
 
       cv::Mat frame;
@@ -30,7 +31,7 @@ namespace Automata {
 
       template<unsigned n>
       inline constexpr void set(unsigned x, unsigned y, bool value = true) {
-          static_assert(n < 8, "Invalid offset for byte");
+          static_assert(n < bitsInDataType, "Invalid offset");
           if (value)
               _nextLattice(x, y) |= (1U << n);
           else
@@ -39,7 +40,7 @@ namespace Automata {
 
       template<unsigned n>
       inline constexpr bool get(unsigned x, unsigned y) {
-          static_assert(n < 8, "Invalid offset for byte");
+          static_assert(n < bitsInDataType, "Invalid offset for byte");
           return (_currentLattice(x, y) & (1U << n)) > 0;
       }
   };
